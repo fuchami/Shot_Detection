@@ -1,16 +1,14 @@
-# code for Research
-
-
-## Shot_detection
- CNN＋LSTMにてショットの自動分割を行うPG
+# Shot_detection
+ CNN＋LSTMにてショットの自動分割を行う
 
 ### LSTM.py
 LSTMのモデルと学習を行う
 
+### 3Dconv.py
+3D Convolutional Neural Networks
 
 ### load.py
 CSVのファイルを読み込むクラス
-
 
 ### all_extra_featue.py / extra_feature.py
 学習済みCNNから特徴ベクトルを抽出するPG
@@ -26,21 +24,14 @@ CSVのファイルを読み込むクラス
 各動画から抽出したCSVファイルを一つに統合する
 
 
-
 ## Description
 
 
 ## Requirement
-
-* Ubuntu 16.04LTS
-* python 3.5.2
-* numpy 1.14.4
-* tensorflow-gpu 1.8.0
-* tensorboard 1.8.0
-* keras 2.2.0
-
-
-
-
-
-
+- Software
+    - python3.6.3
+    - tensorflow==1.7.0
+    - keras==2.1.5
+    - numpy==1.14.0
+    - matplotlib==2.2.2
+    - opencv-python==3.4.1.15
