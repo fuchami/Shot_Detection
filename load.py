@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 def load_csv_data(args):
-    frame_dir = './'
+    frame_dir = args.framedir
     X_data = []
     Y_data = []
     seq_length = args.seqlength

@@ -12,7 +12,7 @@ import keras.backend as K
 import tensorflow as tf
 import h5py
 
-from load import Load_Feature_Data
+import load
 import model
 import tools
 
@@ -31,7 +31,7 @@ def main(args):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, verbose=1, min_lr=1e-9)
     
     """ load data """
-
+    load.load_csv_data(args)
 
     """ build model """
     conv3Dmodel = model.conv3D(args)
@@ -48,6 +48,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
     parser.add_argument('--datasetpath', '-p', type=str, required=False)
+    parser.add_argument('--framedir', '-f', type=str, required=False)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
     parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=64)
