@@ -19,8 +19,8 @@ import tools
 def main(args):
 
     """ setting """
-    para_str = '3dconvNet_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_activation_{}_Adam'.format(
-        args.epochs, args.batchsize, args.seqlength, args.strides, args.dropout, args.loss, args.activation)
+    para_str = '3dconvNet_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_Adam'.format(
+        args.epochs, args.batchsize, args.seqlength, args.strides, args.dropout, args.loss)
 
     """ call back """
     if not os.path.exists('./tb_log/'):
@@ -42,13 +42,14 @@ def main(args):
     conv3Dmodel.summary()
     plot_model(conv3Dmodel, to_file='./images/Conv3DNetworks.png', show_shapes=True)
 
-    conv3Dmodel.compile(loss=args.loss, optimizer=Adam())
+    conv3Dmodel.compile(loss=args.loss, optimizer=RMSprop())
 
     """ start train """
     history = conv3Dmodel.fit_generator(
         generator=train_datagen.flow_from_directory(),
         steps_per_epoch=3000,
         epochs=args.epochs,
+        callbacks=[tb_cb, reduce_lr],
         verbose=1
     )
 
