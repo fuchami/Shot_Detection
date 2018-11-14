@@ -32,9 +32,11 @@ def conv3D(args):
     # 3rd layer
     model.add(Conv3D(128, (3,3,3), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
     # 4th layer
     model.add(Conv3D(256, (2,2,2), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
 
     model.add(Flatten())
     model.add(Dense(1024))
