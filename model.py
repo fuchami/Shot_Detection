@@ -1,15 +1,10 @@
 # coding:utf-8
 
-"""
-モデル用のくらすをつくるよー
-
-"""
-
 import tensorflow as tf
 import keras
 from keras import backend as K
 
-from keras.layers import Dense,Flatten,Dropout,Activation,Input
+from keras.layers import Dense,Flatten,Dropout,Activation,Input,Conv3D, MaxPooling3D,BatchNormalization
 from keras.layers import RepeatVector,Permute,Lambda,merge,multiply,Dot
 from keras.layers.recurrent import LSTM,GRU
 from keras.models import Sequential, load_model,Model
@@ -18,6 +13,38 @@ from keras.layers.wrappers import TimeDistributed, Bidirectional
 from keras.layers.advanced_activations import ELU, LeakyReLU
 
 from surportsPG.custom_recurrents import AttentionDecoder
+
+
+def conv3D(args):
+    # shape = (seqlength, imgsize, imgsize, channels)
+    input_shape = (args.seqlength, args.imgsize, args.imgsize, 3)
+
+    model = Sequential()
+    # first layer
+    model.add(Conv3D(32, (3,3,3), activation='relu', input_shape=input_shape))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+
+    # second layer
+    model.add(Conv3D(64, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+
+    # 3rd layer
+    model.add(Conv3D(128, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    # 4th layer
+    model.add(Conv3D(256, (2,2,2), activation='relu'))
+    model.add(Conv3D(256, (2,2,2), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+
+    model.add(Flatten())
+    model.add(Dense(1024))
+    model.add(Dropout(args.dropout))
+    model.add(Dense(512))
+    model.add(Dropout(args.dropout))
+    model.add(Dense(1, activation='softmax'))
+
+    return model
+
 
 class Models():
 
@@ -154,4 +181,7 @@ class Models():
         
         model = Model(inputs=input_, outputs=y_hat)
         return model
+
+
+
 

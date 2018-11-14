@@ -9,9 +9,37 @@
 
 import numpy as np
 import os, sys, csv
+from keras.preprocessing.image import load_img, img_to_array
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+
+def load_csv_data(args):
+    frame_dir = './'
+    X_data = []
+    Y_data = []
+    seq_length = args.seqlength
+    strides = args.strides
+
+    # load csv file
+    with open(args.datasetpath, 'r') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+
+        for row in reader:
+            Y_data.append(int(row[1]))
+            
+            frame_name = os.path.basename(row[0])
+            print("load file:", frame_name)
+            img_path = frame_dir + frame_name
+
+            img = load_img(img_path, target_size=(args.imgsize, args.imgsize))
+            img_array = img_to_array(img)
+            x = (img_array/255.).astype(np.float32)
+            print("x.shape", x.shape)
+
+    """ data format """ 
+
 
 
 class Load_Feature_Data():
