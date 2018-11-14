@@ -60,7 +60,7 @@ def load_csv_data(args):
     
     # convert np.array
     X = np.array(X).reshape(len(X), seq_length, args.imgsize, args.imgsize, 3)
-    Y = np.array(Y).reshape(len(Y), seq_length, 1)
+    Y = np.array(Y).reshape(len(Y), 1)
     print("convert!!!!!!!!!!!!")
     print (X.shape)
     print (Y.shape)
