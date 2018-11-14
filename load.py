@@ -13,6 +13,66 @@ from keras.preprocessing.image import load_img, img_to_array
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from keras.utils import Sequence
+
+class ImageDataGenerator(object):
+    def __init__(self, args):
+        self.path = args.datasetpath
+        self.seq_length = args.seqlength
+        self.strides = args.strides
+        self.batch_size = args.batchsize
+        self.reset()
+
+    def reset(self):
+        """ reset data load list """
+        print("reset data load list")
+        self.X = []
+        self.Y = []
+        self.X_data = []
+        self.Y_data = []
+
+    def flow_from_directory(self):
+        while True:
+            with open(self.path, 'r')as f:
+                reader = csv.reader(f)
+                header = next(reader)
+
+                for row in reader:
+                    self.Y_data.append(int(row[1]))
+                    img = load_img(row[0], target_size=(args.imgsize, args.imgsize))
+                    img_array = img_to_array(img)
+                    x = (img_array/255.).astype(np.float32)
+                    print("x.shape", x.shape)
+                    X_data.append(x)
+
+                    # バッチサイズの数だけ格納したらデータ整形ののち，return
+                    if len(self.Y_data) == self.batch_size * self.seq_length
+
+                        """ data format """ 
+                        length_of_sequence = len(self.Y_data)
+                        for i in range(0, length_of_sequence-seq_length+1, self.strides):
+                            self.X.append(self.X_data[i: i+self.seq_length])
+
+                            # Y_dataのデータ整形
+                            if self.Y_data[i] == 1:
+                                self.Y_data[i]= 0
+                            # ショット点があれば1，そうでなければ0
+                            print("Y_data list: ", self.Y_data[i:i+self.seq_length])
+                            if 1 in self.Y_data[i: i+self.seq_length]:
+                                print("this data include shot")
+                                self.Y.append(1)
+                            else:
+                                print("no include shot")
+                                self.Y.append(0)
+                            
+                            X_train = self.X
+                            Y_train = self.Y
+                            self.reset()
+                            yield X_train, Y_train
+
+
+
+
 
 def load_csv_data(args):
     X_data = []

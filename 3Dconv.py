@@ -16,7 +16,6 @@ import load
 import model
 import tools
 
-
 def main(args):
 
     """ setting """
@@ -35,7 +34,8 @@ def main(args):
     
     """ load data """
     print("load csv files data")
-    X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
+    #X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
+    train_datagen = load.ImageDataGenerator()
 
     """ build model """
     conv3Dmodel = model.conv3D(args)
@@ -45,11 +45,12 @@ def main(args):
     conv3Dmodel.compile(loss=args.loss, optimizer=Adam())
 
     """ start train """
-    conv3Dmodel.fit(X_train, Y_train,
-                    batch_size=args.batchsize,
-                    epochs=args.epochs,
-                    callbacks=[tb_cb,reduce_lr],
-                    validation_data=[X_valid, Y_valid])
+    history = conv3Dmodel.fit_generator(
+        generator=train_datagen.flow_from_directory(),
+        steps_per_epoch=3000,
+        epochs=args.epochs,
+        verbose=1
+    )
 
     """ model save """
     if not os.path.exists('./saved_model/'):
@@ -64,9 +65,9 @@ if __name__ == '__main__':
     parser.add_argument('--datasetpath', '-p', type=str, required=True)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
     parser.add_argument('--epochs', '-e', default=300)
-    parser.add_argument('--batchsize', '-b', default=64)
+    parser.add_argument('--batchsize', '-b', default=32)
     parser.add_argument('--strides', '-s', default=5)
-    parser.add_argument('--imgsize', '-i', default=256)
+    parser.add_argument('--imgsize', '-i', default=128)
     parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
     parser.add_argument('--loss', '-l', type=str, default='binary_crossentropy')
