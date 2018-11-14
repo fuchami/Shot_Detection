@@ -21,7 +21,7 @@ def main(args):
 
     """ setting """
     para_str = '3dconvNet_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_activation_{}_Adam'.format(
-        args.epochs, args.batchsize, args.seqlength, args.stride, args.dropout, args.loss, args.activation)
+        args.epochs, args.batchsize, args.seqlength, args.strides, args.dropout, args.loss, args.activation)
 
     tb_cb = TensorBoard(log_dir='./tb_log/'+para_str,
                     histogram_freq=1,
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--linetoken', '-t', type=str, required=False)
     parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=64)
-    parser.add_argument('--stride', '-s', default=5)
+    parser.add_argument('--strides', '-s', default=5)
     parser.add_argument('--imgsize', '-i', default=256)
     parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
