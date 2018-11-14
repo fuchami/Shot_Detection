@@ -33,13 +33,12 @@ def conv3D(args):
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
     # 4th layer
     model.add(Conv3D(256, (2,2,2), activation='relu'))
-    model.add(Conv3D(256, (2,2,2), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
 
     model.add(Flatten())
     model.add(Dense(1024))
     model.add(Dropout(args.dropout))
-    model.add(Dense(512))
+    model.add(Dense(128))
     model.add(Dropout(args.dropout))
     model.add(Dense(1, activation='softmax'))
 

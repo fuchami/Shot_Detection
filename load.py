@@ -29,13 +29,11 @@ def load_csv_data(args):
 
         for row in reader:
             Y_data.append(int(row[1]))
-            
-            print("load file:", row[0])
 
             img = load_img(row[0], target_size=(args.imgsize, args.imgsize))
             img_array = img_to_array(img)
             x = (img_array/255.).astype(np.float32)
-            print("x.shape", x.shape)
+            #print("x.shape", x.shape)
             X_data.append(x)
 
     """ data format """ 
@@ -47,12 +45,12 @@ def load_csv_data(args):
         if Y_data[i] == 1:
             Y_data[i]= 0
         # ショット点があれば1，そうでなければ0
-        print("Y_data list: ", Y_data[i:i+seq_length])
+        #print("Y_data list: ", Y_data[i:i+seq_length])
         if 1 in Y_data[i: i+seq_length]:
-            print("this data include shot")
+            #print("this data include shot")
             Y.append(1)
         else:
-            print("no include shot")
+            #print("no include shot")
             Y.append(0)
     
     # convert np.array
@@ -135,7 +133,7 @@ class Load_Feature_Data():
         print (self.Y_.shape)
 
         """ 訓練データと検証データに分割 """
-        train_len = int(len(self.X_) * 0.8)
+        train_len = int(len(self.X_) * 0.9)
         validation_len = len(self.X_) - train_len
 
         X_train, X_valid, Y_train, Y_valid =\
