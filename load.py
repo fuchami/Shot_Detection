@@ -64,9 +64,14 @@ def load_csv_data(args):
     print("convert!!!!!!!!!!!!")
     print (X.shape)
     print (Y.shape)
+
+    """ split train data/ validation data """
+    train_len = int(len(Y)* 0.8)
+    validation_len = len(Y) - train_len
+    X_train, X_valid, Y_train, Y_valid =\
+        train_test_split(X, Y, test_size=validation_len)
     
-
-
+    return X_train, X_valid, Y_train, Y_valid
 
 class Load_Feature_Data():
 

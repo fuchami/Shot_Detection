@@ -23,6 +23,9 @@ def main(args):
     para_str = '3dconvNet_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_activation_{}_Adam'.format(
         args.epochs, args.batchsize, args.seqlength, args.strides, args.dropout, args.loss, args.activation)
 
+    """ call back """
+    if not os.path.exists('./tb_log/'):
+        os.makedirs('./tb_log/')
     tb_cb = TensorBoard(log_dir='./tb_log/'+para_str,
                     histogram_freq=1,
                     write_grads=False,
@@ -31,7 +34,7 @@ def main(args):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, verbose=1, min_lr=1e-9)
     
     """ load data """
-    load.load_csv_data(args)
+    X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
 
     """ build model """
     conv3Dmodel = model.conv3D(args)
@@ -41,9 +44,19 @@ def main(args):
     conv3Dmodel.compile(loss=args.loss, optimizer=Adam())
 
     """ start train """
-    conv3Dmodel.fit()
+    conv3Dmodel.fit(X_train, Y_train,
+                    batch_size=args.batchsize,
+                    epochs=args.epochs,
+                    callbacks=[tb_cb,reduce_lr],
+                    validation_data=[X_valid, Y_valid])
 
     """ model save """
+    if not os.path.exists('./saved_model/'):
+        os.makedirs('./saved_model/')
+
+    json_string = conv3Dmodel.to_json()
+    open('./saved_model/conv3Dmodel.json', 'w').write(json_string)
+    conv3Dmodel.save_weights('./saved_model/conv3Dmodel.h5')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
