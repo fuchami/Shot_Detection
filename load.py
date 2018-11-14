@@ -43,14 +43,14 @@ class ImageDataGenerator(object):
                     img_array = img_to_array(img)
                     x = (img_array/255.).astype(np.float32)
                     print("x.shape", x.shape)
-                    X_data.append(x)
+                    self.X_data.append(x)
 
                     # バッチサイズの数だけ格納したらデータ整形ののち，return
-                    if len(self.Y_data) == self.batch_size * self.seq_length
+                    if len(self.Y_data) == self.batch_size * self.seq_length:
 
                         """ data format """ 
                         length_of_sequence = len(self.Y_data)
-                        for i in range(0, length_of_sequence-seq_length+1, self.strides):
+                        for i in range(0, length_of_sequence-self.seq_length+1, self.strides):
                             self.X.append(self.X_data[i: i+self.seq_length])
 
                             # Y_dataのデータ整形

@@ -18,31 +18,30 @@ from surportsPG.custom_recurrents import AttentionDecoder
 
 def conv3D(args):
     # shape = (seqlength, imgsize, imgsize, channels)
-    input_layer = Input((args.seqlength, args.imgsize, args.imgsize, 3))
+    input_shape = (args.seqlength, args.imgsize, args.imgsize, 3)
 
-    # conv1 layers
-    conv1 = Conv3D(filters=32, kernel_size=(3,3,3), activation='relu')(input_layer)
-    pool1 = MaxPool3D(pool_size=(2,2,2))(conv1)
+    model = Sequential()
+    # first layer
+    model.add(Conv3D(32, (3,3,3), activation='relu', input_shape=input_shape))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
 
-    # conv2 layers
-    conv2 = Conv3D(filters=64, kernel_size=(3,3,3), activation='relu')(pool1)
-    conv3 = Conv3D(filters=128, kernel_size=(3,3,3), activation='relu')(conv2)
-    pool2 = MaxPool3D(pool_size=(2,2,2))(conv3)
+    # second layer
+    model.add(Conv3D(64, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
 
-    # conv3 layers
-    conv4 = Conv3D(filters=256, kernel_size=(3,3,3), activation='relu')(pool2)
-    pool2 = MaxPool3D(pool_size=(2,2,2))(conv4)
-    bn    = BatchNormalization()(pool2)
+    # 3rd layer
+    model.add(Conv3D(128, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    # 4th layer
+    model.add(Conv3D(256, (2,2,2), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
 
-    flatten = Flatten()(bn)
-    dense1 = Dense(units=1024, activation='relu')(flatten)
-    dense1 = Dropout(0.3)(dense1)
-    dense2 = Dense(units=128, activation='relu')(flatten)
-    dense2 = Dropout(0.3)(dense2)
-
-    output_layer = Dense(1, activation='sigmoid')(dense2)
-
-    model = Model(inputs=input_layer, outputs=output_layer)
+    model.add(Flatten())
+    model.add(Dense(1024))
+    model.add(Dropout(args.dropout))
+    model.add(Dense(128))
+    model.add(Dropout(args.dropout))
+    model.add(Dense(1, activation='sigmoid'))
 
     return model
 

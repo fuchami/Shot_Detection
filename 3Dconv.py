@@ -35,7 +35,7 @@ def main(args):
     """ load data """
     print("load csv files data")
     #X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
-    train_datagen = load.ImageDataGenerator()
+    train_datagen = load.ImageDataGenerator(args)
 
     """ build model """
     conv3Dmodel = model.conv3D(args)
@@ -63,7 +63,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
-    parser.add_argument('--datasetpath', '-p', type=str, required=True)
+    parser.add_argument('--datasetpath', '-p', type=str, required=False)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
     parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=32)
