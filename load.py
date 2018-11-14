@@ -18,27 +18,53 @@ def load_csv_data(args):
     frame_dir = args.framedir
     X_data = []
     Y_data = []
+    X = []
+    Y = []
     seq_length = args.seqlength
     strides = args.strides
 
     # load csv file
     with open(args.datasetpath, 'r') as f:
         reader = csv.reader(f)
-        header = next(reader)
+        #header = next(reader)
 
         for row in reader:
             Y_data.append(int(row[1]))
             
             frame_name = os.path.basename(row[0])
-            print("load file:", frame_name)
             img_path = frame_dir + frame_name
+            print("load file:", img_path)
 
             img = load_img(img_path, target_size=(args.imgsize, args.imgsize))
             img_array = img_to_array(img)
             x = (img_array/255.).astype(np.float32)
             print("x.shape", x.shape)
+            X_data.append(x)
 
     """ data format """ 
+    length_of_sequence = len(Y_data)
+    for i in range(0, length_of_sequence-seq_length+1, strides):
+        X.append(X_data[i: i+seq_length])
+
+        # Y_dataのデータ整形
+        if Y_data[i] == 1:
+            Y_data[i]= 0
+        # ショット点があれば1，そうでなければ0
+        print("Y_data list: ", Y_data[i:i+seq_length])
+        if 1 in Y_data[i: i+seq_length]:
+            print("this data include shot")
+            Y.append(1)
+        else:
+            print("no include shot")
+            Y.append(0)
+    
+    # convert np.array
+    X = np.array(X).reshape(len(X), seq_length, 1)
+    Y = np.array(Y).reshape(len(Y), seq_length, 1)
+    print("convert!!!!!!!!!!!!")
+    print (X.shape)
+    print (Y.shape)
+    
 
 
 
