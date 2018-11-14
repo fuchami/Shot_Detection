@@ -15,7 +15,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 def load_csv_data(args):
-    frame_dir = args.framedir
     X_data = []
     Y_data = []
     X = []
@@ -26,16 +25,14 @@ def load_csv_data(args):
     # load csv file
     with open(args.datasetpath, 'r') as f:
         reader = csv.reader(f)
-        #header = next(reader)
+        header = next(reader)
 
         for row in reader:
             Y_data.append(int(row[1]))
             
-            frame_name = os.path.basename(row[0])
-            img_path = frame_dir + frame_name
-            print("load file:", img_path)
+            print("load file:", row[0])
 
-            img = load_img(img_path, target_size=(args.imgsize, args.imgsize))
+            img = load_img(row[0], target_size=(args.imgsize, args.imgsize))
             img_array = img_to_array(img)
             x = (img_array/255.).astype(np.float32)
             print("x.shape", x.shape)

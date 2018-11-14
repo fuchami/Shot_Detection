@@ -34,6 +34,7 @@ def main(args):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, verbose=1, min_lr=1e-9)
     
     """ load data """
+    print("load csv files data")
     X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
 
     """ build model """
@@ -60,8 +61,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
-    parser.add_argument('--datasetpath', '-p', type=str, required=False)
-    parser.add_argument('--framedir', '-f', type=str, required=False)
+    parser.add_argument('--datasetpath', '-p', type=str, required=True)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
     parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=64)
@@ -70,7 +70,6 @@ if __name__ == '__main__':
     parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
     parser.add_argument('--loss', '-l', type=str, default='binary_crossentropy')
-    parser.add_argument('--activation', '-a', type=str, default='sigmoid')
 
     args = parser.parse_args()
 
