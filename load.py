@@ -21,7 +21,7 @@ class ImageDataGenerator(object):
         self.seq_length = args.seqlength
         self.strides = args.strides
         self.batch_size = args.batchsize
-        self.image = args.imgsize
+        self.imgsize = args.imgsize
         self.reset()
 
     def reset(self):
@@ -66,10 +66,10 @@ class ImageDataGenerator(object):
                                 print("no include shot")
                                 self.Y.append(0)
                             
-                            X_train = self.X
-                            Y_train = self.Y
-                            self.reset()
-                            yield X_train, Y_train
+                        X_train = self.X
+                        Y_train = self.Y
+                        self.reset()
+                        yield X_train, Y_train
 
 
 
