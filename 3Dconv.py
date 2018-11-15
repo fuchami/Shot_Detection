@@ -42,7 +42,7 @@ def main(args):
     conv3Dmodel.summary()
     plot_model(conv3Dmodel, to_file='./images/Conv3DNetworks.png', show_shapes=True)
 
-    conv3Dmodel.compile(loss=args.loss, optimizer=RMSprop())
+    conv3Dmodel.compile(loss=args.loss, optimizer=Adam())
 
     """ start train """
     conv3Dmodel.fit(X_train, Y_train,
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=16)
     parser.add_argument('--strides', '-s', default=10)
-    parser.add_argument('--imgsize', '-i', default=64)
+    parser.add_argument('--imgsize', '-i', default=128)
     parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
     parser.add_argument('--loss', '-l', type=str, default='binary_crossentropy')
