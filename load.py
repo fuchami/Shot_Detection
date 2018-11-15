@@ -66,14 +66,10 @@ class ImageDataGenerator(object):
                                 print("no include shot")
                                 self.Y.append(0)
                             
-                            X_train = self.X
-                            Y_train = self.Y
-                            self.reset()
-                            yield X_train, Y_train
-
-
-
-
+                        X_train = np.array(self.X).reshape(len(self.X), self.seq_length, self.imgsize, self.imgsize, 3)
+                        Y_train = np.array(self.Y).reshape(len(self.Y), 1)
+                        self.reset()
+                        yield X_train, Y_train
 
 def load_csv_data(args):
     X_data = []
