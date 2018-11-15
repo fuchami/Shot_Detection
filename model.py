@@ -4,7 +4,8 @@ import tensorflow as tf
 import keras
 from keras import backend as K
 
-from keras.layers import Dense,Flatten,Dropout,Activation,Input,Conv3D, MaxPooling3D,BatchNormalization
+from keras.layers import Dense,Flatten,Dropout,Activation,Input
+from keras.layers import Conv3D, MaxPooling3D,BatchNormalization, MaxPool3D
 from keras.layers import RepeatVector,Permute,Lambda,merge,multiply,Dot
 from keras.layers.recurrent import LSTM,GRU
 from keras.models import Sequential, load_model,Model
@@ -31,16 +32,18 @@ def conv3D(args):
     # 3rd layer
     model.add(Conv3D(128, (3,3,3), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
     # 4th layer
     model.add(Conv3D(256, (2,2,2), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
 
     model.add(Flatten())
     model.add(Dense(1024))
     model.add(Dropout(args.dropout))
     model.add(Dense(128))
     model.add(Dropout(args.dropout))
-    model.add(Dense(1, activation='softmax'))
+    model.add(Dense(1, activation='sigmoid'))
 
     return model
 
