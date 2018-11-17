@@ -127,20 +127,21 @@ def load_csv_data(args):
 
 class Load_Feature_Data():
 
-    def __init__(self, seq_length, stride,feature_length):
+    def __init__(self, args):
         
         self.X_data         = []
         self.Y_data         = []
         self.X_             = []
         self.Y_             = []
-        self.feature_length = feature_length
-        self.seq_length     = seq_length
-        self.stride         = stride
+        self.feature_length = args.featurelength
+        self.seq_length     = args.seqlength
+        self.stride         = args.stride
+        self.datasetpath    = args.datasetpath
 
 
-    def load(self,feature_path):
+    def load(self):
         
-        with open(feature_path, 'r') as f:
+        with open(self.datasetpath, 'r') as f:
 
             reader = csv.reader(f)
             header = next(reader)
