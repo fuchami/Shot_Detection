@@ -50,13 +50,13 @@ def conv3D(args):
 
 class Models():
 
-    def __init__(self,seq_length,feature_length):
+    def __init__(self, args):
 
         self.n_hidden       = 1024
         self.n_hidden2      = 512
-        self.feature_length = feature_length
-        self.seq_length     = seq_length
-        self.dropout        = 0.3
+        self.feature_length = args.featurelength
+        self.seq_length     = args.seqlength
+        self.dropout        = args.dropout
         self.units          = 64
 
     def LSTM(self):
