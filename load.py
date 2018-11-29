@@ -26,7 +26,7 @@ class ImageDataGenerator(object):
 
     def reset(self):
         """ reset data load list """
-        print("reset data load list")
+        #print("reset data load list")
         self.X = []
         self.Y = []
         self.X_data = []
@@ -43,7 +43,7 @@ class ImageDataGenerator(object):
                     img = load_img(row[0], target_size=(self.imgsize, self.imgsize))
                     img_array = img_to_array(img)
                     x = (img_array/255.).astype(np.float32)
-                    print("x.shape", x.shape)
+                    #print("x.shape", x.shape)
                     self.X_data.append(x)
 
                     # バッチサイズの数だけ格納したらデータ整形ののち，return
@@ -58,12 +58,12 @@ class ImageDataGenerator(object):
                             if self.Y_data[i] == 1:
                                 self.Y_data[i]= 0
                             # ショット点があれば1，そうでなければ0
-                            print("Y_data list: ", self.Y_data[i:i+self.seq_length])
+                            #print("Y_data list: ", self.Y_data[i:i+self.seq_length])
                             if 1 in self.Y_data[i: i+self.seq_length]:
-                                print("this data include shot")
+                                #print("this data include shot")
                                 self.Y.append(1)
                             else:
-                                print("no include shot")
+                                #print("no include shot")
                                 self.Y.append(0)
                             
                         X_train = np.array(self.X).reshape(len(self.X), self.seq_length, self.imgsize, self.imgsize, 3)
