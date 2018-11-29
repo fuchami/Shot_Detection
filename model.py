@@ -4,7 +4,7 @@ import tensorflow as tf
 import keras
 from keras import backend as K
 
-from keras.layers import Dense,Flatten,Dropout,Activation,Input, GlobalAveragePooling2D
+from keras.layers import Dense,Flatten,Dropout,Activation,Input, GlobalAveragePooling3D
 from keras.layers import Conv3D, MaxPooling3D,BatchNormalization, MaxPool3D
 from keras.layers import RepeatVector,Permute,Lambda,merge,multiply,Dot
 from keras.layers.recurrent import LSTM,GRU
@@ -70,7 +70,7 @@ def Conv3D_Classes(args, classes):
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
     model.add(BatchNormalization())
 
-    model.add(GlobalAveragePooling2D())
+    model.add(GlobalAveragePooling3D())
 
     model.add(Dense(128))
     model.add(Dropout(args.dropout))

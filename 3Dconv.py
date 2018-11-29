@@ -34,7 +34,7 @@ def main(args):
     
     """ load data """
     print("load csv files data")
-    X_train, X_valid, Y_train, Y_valid = load.load_csv_data(args)
+    X_train, X_valid, Y_train, Y_valid = load.load_csv_data_classes(args)
     #train_datagen = load.ImageDataGenerator(args)
 
     """ build model """
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('--batchsize', '-b', default=16)
     parser.add_argument('--strides', '-s', default=10)
     parser.add_argument('--imgsize', '-i', default=64)
-    parser.add_argument('--seqlength', default=15)
+    parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
     parser.add_argument('--loss', '-l', type=str, default='categorical_crossentropy')
 
