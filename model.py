@@ -4,7 +4,7 @@ import tensorflow as tf
 import keras
 from keras import backend as K
 
-from keras.layers import Dense,Flatten,Dropout,Activation,Input
+from keras.layers import Dense,Flatten,Dropout,Activation,Input, GlobalAveragePooling2D
 from keras.layers import Conv3D, MaxPooling3D,BatchNormalization, MaxPool3D
 from keras.layers import RepeatVector,Permute,Lambda,merge,multiply,Dot
 from keras.layers.recurrent import LSTM,GRU
@@ -16,6 +16,7 @@ from keras.layers.advanced_activations import ELU, LeakyReLU
 from surportsPG.custom_recurrents import AttentionDecoder
 
 
+# ショットありorなしの2値分類
 def conv3D(args):
     # shape = (seqlength, imgsize, imgsize, channels)
     input_shape = (args.seqlength, args.imgsize, args.imgsize, 3)
@@ -44,6 +45,36 @@ def conv3D(args):
     model.add(Dense(128))
     model.add(Dropout(args.dropout))
     model.add(Dense(1, activation='sigmoid'))
+
+    return model
+
+def Conv3D_Classes(args, classes):
+    # shape = (seqlength, imgsize, imgsize, channels)
+    input_shape = (args.seqlength, args.imgsize, args.imgsize, 3)
+
+    model = Sequential()
+    # first layer
+    model.add(Conv3D(32, (3,3,3), activation='relu', input_shape=input_shape))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+
+    # second layer
+    model.add(Conv3D(64, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+
+    # 3rd layer
+    model.add(Conv3D(128, (3,3,3), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
+    # 4th layer
+    model.add(Conv3D(256, (2,2,2), activation='relu'))
+    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    model.add(BatchNormalization())
+
+    model.add(GlobalAveragePooling2D())
+
+    model.add(Dense(128))
+    model.add(Dropout(args.dropout))
+    model.add(Dense(classes, activation='sigmoid'))
 
     return model
 

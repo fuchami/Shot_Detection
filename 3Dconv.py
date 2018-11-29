@@ -38,7 +38,8 @@ def main(args):
     train_datagen = load.ImageDataGenerator(args)
 
     """ build model """
-    conv3Dmodel = model.conv3D(args)
+    classes = 10
+    conv3Dmodel =  model.Conv3D_Classes(args, classes)
     conv3Dmodel.summary()
     plot_model(conv3Dmodel, to_file='./images/Conv3DNetworks.png', show_shapes=True)
 
@@ -65,10 +66,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
     parser.add_argument('--datasetpath', '-p', type=str, required=False)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
-    parser.add_argument('--epochs', '-e', default=300)
-    parser.add_argument('--batchsize', '-b', default=32)
+    parser.add_argument('--epochs', '-e', default=30)
+    parser.add_argument('--batchsize', '-b', default=16)
     parser.add_argument('--strides', '-s', default=5)
-    parser.add_argument('--imgsize', '-i', default=128)
+    parser.add_argument('--imgsize', '-i', default=64)
     parser.add_argument('--seqlength', default=10)
     parser.add_argument('--dropout', default=0.3)
     parser.add_argument('--loss', '-l', type=str, default='binary_crossentropy')
