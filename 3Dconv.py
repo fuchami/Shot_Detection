@@ -19,7 +19,7 @@ import tools
 def main(args):
 
     """ setting """
-    para_str = '3dconvNet_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_Adam'.format(
+    para_str = '3dconvNetClasses_Epoch{}_Batchsize{}_SeqLength{}_Stride{}_dropout{}_loss{}_Adam'.format(
         args.epochs, args.batchsize, args.seqlength, args.strides, args.dropout, args.loss)
 
     """ call back """
@@ -41,9 +41,9 @@ def main(args):
     classes = 10
     conv3Dmodel =  model.Conv3D_Classes(args, classes)
     conv3Dmodel.summary()
-    plot_model(conv3Dmodel, to_file='./images/Conv3DNetworks.png', show_shapes=True)
+    plot_model(conv3Dmodel, to_file='./images/Conv3DNetworks_forClasses.png', show_shapes=True)
 
-    conv3Dmodel.compile(loss=args.loss, optimizer=Adam())
+    conv3Dmodel.compile(loss=args.loss, optimizer=Adam(), metrics=['accuracy'])
 
     """ start train 
     history = conv3Dmodel.fit_generator(
@@ -64,28 +64,20 @@ def main(args):
         os.makedirs('./saved_model/')
 
     json_string = conv3Dmodel.to_json()
-    open('./saved_model/conv3Dmodel.json', 'w').write(json_string)
-    conv3Dmodel.save_weights('./saved_model/conv3Dmodel.h5')
+    open('./saved_model/conv3Dmodel_class.json', 'w').write(json_string)
+    conv3Dmodel.save_weights('./saved_model/conv3Dclassmodel.h5')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='train 3Dconv-net for shot detection')
     parser.add_argument('--datasetpath', '-p', type=str, required=False)
     parser.add_argument('--linetoken', '-t', type=str, required=False)
-<<<<<<< HEAD
     parser.add_argument('--epochs', '-e', default=30)
-    parser.add_argument('--batchsize', '-b', default=16)
-    parser.add_argument('--strides', '-s', default=5)
-    parser.add_argument('--imgsize', '-i', default=64)
-    parser.add_argument('--seqlength', default=10)
-=======
-    parser.add_argument('--epochs', '-e', default=300)
     parser.add_argument('--batchsize', '-b', default=16)
     parser.add_argument('--strides', '-s', default=10)
     parser.add_argument('--imgsize', '-i', default=64)
     parser.add_argument('--seqlength', default=15)
->>>>>>> 0df13f0e0b86c73fa911853a4b56dc17dff3e0db
     parser.add_argument('--dropout', default=0.3)
-    parser.add_argument('--loss', '-l', type=str, default='binary_crossentropy')
+    parser.add_argument('--loss', '-l', type=str, default='categorical_crossentropy')
 
     args = parser.parse_args()
 

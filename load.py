@@ -125,6 +125,58 @@ def load_csv_data(args):
     
     return X_train, X_valid, Y_train, Y_valid
 
+# クラス分類用のデータ整形読み込み
+def load_csv_data_classes(args):
+    X_data = []
+    Y_data = []
+    X = []
+    Y = []
+    seq_length = args.seqlength
+    strides = args.strides
+
+    # load csv file
+    with open(args.datasetpath, 'r') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+
+        for row in reader:
+            Y_data.append(int(row[1]))
+
+            img = load_img(row[0], target_size=(args.imgsize, args.imgsize))
+            img_array = img_to_array(img)
+            x = (img_array/255.).astype(np.float32)
+            #print("x.shape", x.shape)
+            X_data.append(x)
+
+    """ data format """ 
+    length_of_sequence = len(Y_data)
+    for i in range(0, length_of_sequence-seq_length+1, strides):
+
+        # Y_dataのデータ整形
+        if Y_data[i] == 1:
+            Y_data[i]= 0
+
+        # ショット点があれば1，そうでなければ0
+        print("Y_data list: ", Y_data[i:i+seq_length])
+        # ショット点が1つまたは，0であれば追加
+        if np.sum(Y_data[i:i+seq_length] == 1) < 2:
+            X.append(X_data[i: i+seq_length])
+            Y.append(Y_data[i:i+seq_length])
+    
+    # convert np.array
+    X = np.array(X).reshape(len(X), seq_length, args.imgsize, args.imgsize, 3)
+    Y = np.array(Y).reshape(len(Y), seq_length)
+    print("convert!!!!!!!!!!!!")
+    print (X.shape)
+    print (Y.shape)
+
+    """ split train data/ validation data """
+    train_len = int(len(Y)* 0.8)
+    validation_len = len(Y) - train_len
+    X_train, X_valid, Y_train, Y_valid =\
+        train_test_split(X, Y, test_size=validation_len)
+    
+    return X_train, X_valid, Y_train, Y_valid
 class Load_Feature_Data():
 
     def __init__(self, args):
