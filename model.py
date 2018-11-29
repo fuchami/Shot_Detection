@@ -109,18 +109,17 @@ class Models():
         return output_attention_mul
 
     def Attention_before_LSTM(self):
-       _input = Input(shape=(self.seq_length, self.feature_length)) 
+        _input = Input(shape=(self.seq_length, self.feature_length)) 
 
-       drop1 = Dropout(0.3)(_input)
-       attention_mul = self.attention_3d_block(drop1)
+        drop1 = Dropout(0.3)(_input)
+        attention_mul = self.attention_3d_block(drop1)
 
-       attention_mul = LSTM(self.n_hidden, return_sequences=True)(attention_mul)
-       output = TimeDistributed(Dense(1, activation='linear'))(attention_mul)
+        attention_mul = LSTM(self.n_hidden, return_sequences=True)(attention_mul)
+        output = TimeDistributed(Dense(1, activation='linear'))(attention_mul)
 
-       model = Model(input=[_input], output=output)
+        model = Model(input=[_input], output=output)
 
-       return model
-
+        return model
 
     def Attention_after_LSTM(self):
         _input = Input(shape=(self.seq_length, self.feature_length))
