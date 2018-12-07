@@ -31,11 +31,11 @@ def conv3D(args):
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
 
     # 3rd layer
-    model.add(Conv3D(128, (3,3,3), activation='relu'))
+    model.add(Conv3D(84, (3,3,3), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
     model.add(BatchNormalization())
     # 4th layer
-    model.add(Conv3D(256, (2,2,2), activation='relu'))
+    model.add(Conv3D(128, (2,2,2), activation='relu'))
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
     model.add(BatchNormalization())
 
@@ -66,15 +66,15 @@ def Conv3D_Classes(args, classes):
     model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
     model.add(BatchNormalization())
     # 4th layer
-    model.add(Conv3D(256, (2,2,2), activation='relu'))
-    model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
-    model.add(BatchNormalization())
+    #model.add(Conv3D(256, (2,2,2), activation='relu'))
+    #model.add(MaxPooling3D(pool_size=(1,2,2), strides=(1,2,2)))
+    #model.add(BatchNormalization())
 
     model.add(GlobalAveragePooling3D())
 
     model.add(Dense(128))
     model.add(Dropout(args.dropout))
-    model.add(Dense(classes, activation='sigmoid'))
+    model.add(Dense(classes, activation='softmax'))
 
     return model
 
